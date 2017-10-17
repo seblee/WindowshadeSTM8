@@ -18,17 +18,49 @@ extern uFLAG FLAG_test1;
 #define FG_Receiver_LED_RX FLAG_test1.BIT.Bit6
 #define FG_First_auto FLAG_test1.BIT.Bit7
 //************************************************
+extern volatile uFLAG FLAG1;
+//************************************************
+#define FLAG1_BYTE FLAG1.BYTE
+//------------------------------------------------
+#define FLAG_Receiver_BEEP FLAG1.BIT.Bit0
+#define FLAG_ID_Login_EXIT FLAG1.BIT.Bit1
+#define FLAG_ID_Login_OK_bank FLAG1.BIT.Bit2
+#define FG_beep_on FLAG1.BIT.Bit3
+#define FG_beep_off FLAG1.BIT.Bit4
+#define FG_allow_out FLAG1.BIT.Bit5
+#define FG_NOT_allow_out FLAG1.BIT.Bit6
+#define FG_10ms FLAG1.BIT.Bit7
+//************************************************
 
-extern UINT8 TIME_10ms;
-extern UINT16 TIMER1s;
-extern UINT16 TIMER300ms;
-extern UINT16 TIMER18ms;
-extern UINT8 TIMER250ms_STOP;
-extern UINT16 TIME_auto_out;
-extern UINT16 TIME_auto_close;
-extern UINT16 time_3sec;
-extern UINT32 ID_Receiver_DATA[256]; //д��EEPROM ID������
-extern UINT16 ID_DATA_PCS;
+extern u8 TIME_10ms;
+extern u16 TIMER1s;
+extern u16 TIMER300ms;
+extern u16 TIMER18ms;
+extern u8 TIMER250ms_STOP;
+extern u16 TIME_auto_out;
+extern u16 TIME_auto_close;
+extern u16 time_3sec;
+extern u32 ID_Receiver_DATA[256]; //д��EEPROM ID������
+extern u16 ID_DATA_PCS;
+extern u32 DATA_Packet_ID;
+extern u8 DATA_Packet_Control;
+extern u8 DATA_Packet_Contro_buf; //2015.3.24修正
+extern u32 ID_Receiver_Login;
+extern u8 TIME_EMC;
+
+extern u16 TIME_Receiver_Login_restrict;
+extern u8 COUNT_Receiver_Login;
+extern u16 TIME_Receiver_Login;
+extern u16 TIME_Login_EXIT_rest;
+extern u16 TIME_Receiver_Login_led;
+
+extern u8 TIME_OUT_OPEN_CLOSE;
+extern u16 TIME_Receiver_LED_OUT;
+extern u16 TIME_Login_EXIT_Button;
+extern u16 Manual_override_TIMER;
+extern u16 time_Login_exit_256;
+extern u16 TIME_Fine_Calibration; //窄带下中频滤波器100KHz精校
+
 extern u8 Count_key_SW3;
 extern u8 Display_key_SW3;
 extern ADF70XX_REG_T ROM_adf7030_value[16];
@@ -50,7 +82,7 @@ extern const u8 ADF7030Cfg[];
 u32 CFG_SIZE(void);
 
 #define OPEN_LONG 12
-extern UINT8 CONST_TXPACKET_DATA_20000AF0[OPEN_LONG];
+extern u8 CONST_TXPACKET_DATA_20000AF0[OPEN_LONG];
 
 extern u32 GENERIC_PKT_TEST_MODES0_32bit_20000548;
 extern const u8 TEST_MODES0_para[5];
@@ -60,7 +92,7 @@ extern const u8 CONST_AFC_Configuration_400041F8[4];
 extern u16 PA_POWER_OUT[2][18];
 
 void SPI_INIT(void);
-UINT32 ADF7030_GET_MISC_FW(void); //??MISC_FW?????
+u32 ADF7030_GET_MISC_FW(void); //??MISC_FW?????
 void ADF7030_WRITING_PROFILE_FROM_POWERON(void);
 void ADF7030_TRANSMITTING_FROM_POWEROFF(void);
 void ADF7030_RECEIVING_FROM_POWEROFF(void);

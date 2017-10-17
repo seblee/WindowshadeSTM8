@@ -38,5 +38,12 @@ void TIM4_UPD_OVF(void)
         ErrStateTimeer--;
     if (StateReadTimer > 0)
         StateReadTimer--;
+    if (TIME_10ms)
+        --TIME_10ms;
+    else
+    { // 10mS FLAG
+        TIME_10ms = 10;
+        FG_10ms = 1;
+    }
     TIM4_SR1_bit.UIF = 0; // 清除中断标记
 }

@@ -56,6 +56,10 @@
         LedREDTimer = 60;   \
     }
 
+#define Receiver_LED_OUT PC_ODR_ODR1 // Output   受信机继电器动作输出  高电平有效
+#define Receiver_LED_TX PC_ODR_ODR1  // Output   受信机送信指示  高电平有效
+#define Receiver_LED_RX PC_ODR_ODR1  // Output   受信机受信指示  高电平有效
+
 /********************LCD寄存器*****************************************/
 #define PIN_LCD_SCLK PD_ODR_ODR1  // 输出；LCD串行时钟(√)
 #define PIN_LCD_RST PD_ODR_ODR2   // 输出；LCD复位脚  低电平有效(√)
@@ -159,12 +163,14 @@
 /********************BEEP引脚寄存器*****************************************/
 #define PIN_BEEP PA_ODR_ODR0     // Output   蜂鸣器
 #define PIN_BEEP_DDR PA_DDR_DDR0 // Output   蜂鸣器
-#define PIN_BEEP_CR1 PA_CR1_C10  // Output   蜂鸣器//#define Receiver_OUT_STOP_CR1   PD_CR1_C11  // Output   受信机继电器stop  高电平有效
-
+#define PIN_BEEP_CR1 PA_CR1_C10  // Output   蜂鸣器
+//#define Receiver_OUT_STOP_CR1   PD_CR1_C11  // Output   受信机继电器stop  高电平有效
 /********************WORK/TEST切换引脚寄存器*****************************************/
 #define WORK_TEST PB_IDR_IDR0     // Input 受信机测试脚  高电平有效
 #define WORK_TEST_DDR PB_DDR_DDR0 // Input 受信机测试脚  高电平有效
 #define WORK_TEST_CR1 PB_CR1_C10  // Input 受信机测试脚  高电平有效
 #define WORK_TEST_CR2 PB_CR2_C20  // Input 受信机测试脚  高电平有效
+
+#define Receiver_Login 1 // Input   受信机登录键   低电平有效
 
 #endif

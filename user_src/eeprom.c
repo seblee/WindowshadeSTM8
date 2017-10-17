@@ -231,50 +231,52 @@ void ALL_ID_EEPROM_Erase(void)
 }
 void ID_EEPROM_write(void)
 {
-    /*    UINT8 xm[3]={0};
-    UINT16 i,j,m1;
-    uni_rom_id xn,xd;
-     ID_DATA_PCS++;
-     xm[0]=ID_DATA_PCS%256;
-     xm[1]=ID_DATA_PCS/256;
+    UINT8 xm[3] = {0};
+    UINT16 i, j, m1;
+    uni_rom_id xn, xd;
+    ID_DATA_PCS++;
+    xm[0] = ID_DATA_PCS % 256;
+    xm[1] = ID_DATA_PCS / 256;
 
-     UnlockFlash( UNLOCK_EEPROM_TYPE );
-	WriteByteToFLASH( addr_eeprom_sys+0x3FE, xm[1]);
-	WriteByteToFLASH( addr_eeprom_sys+0x3FF, xm[0]);
-     LockFlash( UNLOCK_EEPROM_TYPE );
+    UnlockFlash(UNLOCK_EEPROM_TYPE);
+    WriteByteToFLASH(addr_eeprom_sys + 0x3FE, xm[1]);
+    WriteByteToFLASH(addr_eeprom_sys + 0x3FF, xm[0]);
+    LockFlash(UNLOCK_EEPROM_TYPE);
 
-     ID_Receiver_DATA[ID_DATA_PCS-1]=ID_Receiver_Login;
-     xn.IDL=ID_Receiver_Login;
+    ID_Receiver_DATA[ID_DATA_PCS - 1] = ID_Receiver_Login;
+    xn.IDL = ID_Receiver_Login;
 
-     for(i=0;i<260;i++){
-        j=3*i;
-        xm[0] = ReadByteEEPROM( addr_eeprom_sys+j);
-	j++;
-        xm[1] = ReadByteEEPROM( addr_eeprom_sys+j);
-	j++;
-        xm[2] = ReadByteEEPROM( addr_eeprom_sys+j);
-        xd.IDB[0]=0;
-        xd.IDB[1]=xm[0];
-        xd.IDB[2]=xm[1];
-        xd.IDB[3]=xm[2];
-        if((xd.IDL==0)||(xd.IDL==0xFFFFFF))break;
+    for (i = 0; i < 260; i++)
+    {
+        j = 3 * i;
+        xm[0] = ReadByteEEPROM(addr_eeprom_sys + j);
+        xm[1] = ReadByteEEPROM(addr_eeprom_sys + j + 1);
+        xm[2] = ReadByteEEPROM(addr_eeprom_sys + j + 2);
+        xd.IDB[0] = 0;
+        xd.IDB[1] = xm[0];
+        xd.IDB[2] = xm[1];
+        xd.IDB[3] = xm[2];
+        if ((xd.IDL == 0) || (xd.IDL == 0xFFFFFF))
+            break;
         ClearWDT(); // Service the WDT
     }
 
-     xm[0]=xn.IDB[1];
-     xm[1]=xn.IDB[2];
-     xm[2]=xn.IDB[3];
-     m1=j-2;
-     UnlockFlash( UNLOCK_EEPROM_TYPE );
-	WriteByteToFLASH( addr_eeprom_sys+m1, xm[0]);
-	m1++;
-	WriteByteToFLASH( addr_eeprom_sys+m1, xm[1]);
-	m1++;
-	WriteByteToFLASH( addr_eeprom_sys+m1, xm[2]);
-     LockFlash( UNLOCK_EEPROM_TYPE );
+    xm[0] = xn.IDB[1];
+    xm[1] = xn.IDB[2];
+    xm[2] = xn.IDB[3];
+    m1 = j - 2;
+    UnlockFlash(UNLOCK_EEPROM_TYPE);
+    WriteByteToFLASH(addr_eeprom_sys + m1, xm[0]);
+    WriteByteToFLASH(addr_eeprom_sys + m1 + 1, xm[1]);
+    WriteByteToFLASH(addr_eeprom_sys + m1 + 2, xm[2]);
+    LockFlash(UNLOCK_EEPROM_TYPE);
 
-     if(ID_DATA_PCS>=256){ID_Login_EXIT_Initial();DATA_Packet_Control=0;time_Login_exit_256=110;}
-  */
+    if (ID_DATA_PCS >= 256)
+    {
+        ID_Login_EXIT_Initial();
+        DATA_Packet_Control = 0;
+        time_Login_exit_256 = 110;
+    }
 }
 
 void ID_EEPROM_write_0x00(void)
@@ -338,4 +340,162 @@ void ID_EEPROM_write_0x00(void)
         ClearWDT(); // Service the WDT
     }
     */
+}
+
+void SW2_SW3_KEY(void)
+{
+    //   if(HA_ERR_signal==0){   //SW3
+    //      TIME_key_SW3++;
+    //      if((TIME_key_SW3>=3)&&(Flag_key_SW3==0)){
+    //        Flag_key_SW3=1;
+    //        Count_key_SW3++;
+    //        if(Count_key_SW3>1)Count_key_SW3=0;
+    //      }
+    //   }
+    //   else {TIME_key_SW3=0;Flag_key_SW3=0;}
+}
+
+void ID_learn(void)
+{
+    //    UINT16 i;
+    // #if defined(__Product_PIC32MX2_Receiver__)
+    if (FG_10ms)
+    { //90==1秒
+        FG_10ms = 0;
+
+        SW2_SW3_KEY();
+
+        //     if(time_3sec)--time_3sec;
+        if (TIME_EMC)
+            --TIME_EMC;
+        if (TIME_auto_out)
+            --TIME_auto_out;
+        if (TIME_auto_close)
+            --TIME_auto_close;
+        if (TIME_OUT_OPEN_CLOSE)
+            --TIME_OUT_OPEN_CLOSE;
+        if (TIME_Receiver_LED_OUT)
+            --TIME_Receiver_LED_OUT;
+        if (TIME_Login_EXIT_Button)
+            --TIME_Login_EXIT_Button;
+        if (Manual_override_TIMER)
+            --Manual_override_TIMER;
+        if (time_Login_exit_256)
+            --time_Login_exit_256;
+        if (TIME_Fine_Calibration)
+            --TIME_Fine_Calibration;
+
+        if (TIME_Receiver_Login_restrict)
+            --TIME_Receiver_Login_restrict;
+        else if ((FLAG_ID_Erase_Login == 1) || (FLAG_ID_Login == 1))
+            ;
+        else
+        {
+            TIME_Receiver_Login = 0;
+            COUNT_Receiver_Login = 0;
+        }
+
+        if (Receiver_Login == 0)
+        {
+            TIME_Receiver_Login++;
+            TIME_Receiver_Login_restrict = 350;
+            if ((COUNT_Receiver_Login >= 2) && (FLAG_ID_Erase_Login == 0) && (FLAG_ID_Login == 0) && (ID_DATA_PCS < 256))
+            {
+                FLAG_ID_Login = 1;
+                TIME_Login_EXIT_rest = 5380;
+                TIME_Login_EXIT_Button = 500;
+            } //6000
+            if (((FLAG_ID_Erase_Login == 1) && (COUNT_Receiver_Login >= 1)) ||
+                ((FLAG_ID_Login == 1) && (COUNT_Receiver_Login >= 3)))
+            {
+                if (TIME_Login_EXIT_Button == 0)
+                    ID_Login_EXIT_Initial();
+            }
+        }
+        if (Receiver_Login == 1)
+        {
+            if (TIME_Receiver_Login > 3)
+            {
+                if (COUNT_Receiver_Login < 10)
+                    COUNT_Receiver_Login++;
+            }
+            if (FLAG_ID_Login_EXIT == 1)
+            {
+                FLAG_ID_Login_EXIT = 0;
+                COUNT_Receiver_Login = 0;
+            }
+            TIME_Receiver_Login = 0;
+        }
+        if (TIME_Receiver_Login >= 250)
+        {
+            TIME_Receiver_Login = 0;
+            FLAG_ID_Erase_Login = 1;
+            FLAG_ID_Erase_Login_PCS = 1; //追加多次ID登录
+            TIME_Login_EXIT_rest = 5380;
+            TIME_Login_EXIT_Button = 500;
+        }
+        if ((FLAG_ID_Erase_Login == 1) || (FLAG_ID_Login == 1))
+        {
+            TIME_Receiver_Login_led++;
+            if (TIME_Receiver_Login_led >= 46)
+            {
+                TIME_Receiver_Login_led = 0;
+                if (TIME_Receiver_LED_OUT > 0)
+                    Receiver_LED_OUT = 1;
+                else
+                    Receiver_LED_OUT = !Receiver_LED_OUT;
+            }
+            if ((FLAG_ID_Login_OK == 1) && (FLAG_ID_Login_OK_bank == 0))
+            {
+                //FLAG_ID_Login_OK_bank=1;             //追加多次ID登录
+                FLAG_ID_Login_OK = 0; //追加多次ID登录
+                if (FLAG_IDCheck_OK == 1)
+                    FLAG_IDCheck_OK = 0;
+                else
+                {
+                    BEEP_and_LED();
+                    TIME_Login_EXIT_rest = 5380; //追加多次ID登录
+                    if ((FLAG_ID_Login == 1) && (ID_Receiver_Login != 0xFFFFFE))
+                        ID_EEPROM_write();
+                    else if (FLAG_ID_Erase_Login == 1)
+                    {
+                        if (FLAG_ID_Erase_Login_PCS == 1)
+                        {
+                            FLAG_ID_Erase_Login_PCS = 0;
+                            ID_DATA_PCS = 0;
+                            ALL_ID_EEPROM_Erase();
+                        } //追加多次ID登录
+                        if (ID_Receiver_Login != 0xFFFFFE)
+                            ID_EEPROM_write();
+                    }
+                } //end else
+            }     //  end  if((FLAG_ID_Login_OK==1)&&(FLAG_ID_Login_OK_bank==0))
+            if (TIME_Login_EXIT_rest)
+                --TIME_Login_EXIT_rest;
+            else
+                ID_Login_EXIT_Initial();
+        } //end if((FLAG_ID_Erase_Login==1)||(FLAG_ID_Login==1))
+    }
+    //#endif
+}
+
+void ID_Login_EXIT_Initial(void)
+{
+    // #if defined(__Product_PIC32MX2_Receiver__)
+    FLAG_ID_Login_EXIT = 1;
+    FLAG_ID_Login_OK = 0;
+    FLAG_ID_Login_OK_bank = 0;
+    FLAG_ID_Login = 0;
+    FLAG_ID_Erase_Login = 0;
+    Receiver_LED_OUT = 0;
+    COUNT_Receiver_Login = 0;
+    //#endif
+    //#if defined(__Product_PIC32MX2_WIFI__)
+    //     FLAG_ID_Login_EXIT=1;
+    //     FLAG_ID_Login_OK=0;
+    //     FLAG_ID_Login_OK_bank=0;
+    //     FLAG_ID_Login=0;
+    //     FLAG_ID_Erase_Login=0;
+    //     WIFI_LED_RX=0;
+    //#endif
 }
